@@ -48,7 +48,8 @@ class privacyPreserving(object):
                             for t in T:
                                 self.add_privacy_metadata(log[t])
                                 if external_name:
-                                    privacy_aware_log_dir = os.path.join(directory, file_name)
+                                    privacy_aware_log_dir = os.path.join(directory, "output_exttlkc_run.xes")
+                                    n_file_path = directory + "/output_exttlkc_run.xes" #added n_file_Path definition in case of external data (Thorwin Bergholz)
                                 else:
                                     n_file_path = file_name + "_" + str(t) + "_" + str(l) + "_" + str(k) + "_" + str(
                                         c) + "_" + bk_type + ".xes"
@@ -64,13 +65,14 @@ class privacyPreserving(object):
                                                              alpha, beta, utility_measure, multiprocess, mp_technique)
                                 self.add_privacy_metadata(log_time)
                                 if external_name:
-                                    privacy_aware_log_dir = os.path.join(directory, file_name)
+                                    privacy_aware_log_dir = os.path.join(directory, "output_exttlkc_run.xes")
+                                    n_file_path = directory + "/output_exttlkc_run.xes" #added n_file_Path definition in case of external data (Thorwin Bergholz)
                                 else:
                                     n_file_path = file_name + "_" + str(t) + "_" + str(l) + "_" + str(k) + "_" + str(
                                     c) + "_" + bk_type + ".xes"
                                     privacy_aware_log_dir = os.path.join(directory, n_file_path)
                                 xes_exporter.export_log(log_time, privacy_aware_log_dir)
-                                print(n_file_path + " has been exported!")
+                                print(n_file_path + " has been exported!", flush=True) #added flush so it is visible in docker logs (Thorwin Bergholz)
                                 dict1 = dict2
                     except Exception as e:
                         exception_msg = e
