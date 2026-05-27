@@ -17,7 +17,7 @@ class privacyPreserving(object):
         '''
         self.log = xes_importer_factory.apply(log)
 
-    def apply(self, T, L, K, C, sensitive_att, cont, bk_type, trace_attributes, life_cycle, all_life_cycle, alpha, beta, directory, file_name, external_name, utility_measure=[0.5,0.5], multiprocess=True, mp_technique='pool'):
+    def apply(self, T, L, K, C, instructionIdExtTLKC, sensitive_att, cont, bk_type, trace_attributes, life_cycle, all_life_cycle, alpha, beta, directory, file_name, external_name, utility_measure=[0.5,0.5], multiprocess=True, mp_technique='pool'):
 
         if bk_type == 'relative':
             dict1 = {
@@ -46,10 +46,10 @@ class privacyPreserving(object):
                                                               alpha, beta, utility_measure, multiprocess, mp_technique)
                             dict1 = dict2
                             for t in T:
-                                self.add_privacy_metadata(log[t])
+                                #self.add_privacy_metadata(log[t]) removed Metadata unwanted in comparison (Thorwin Bergholz)
                                 if external_name:
-                                    privacy_aware_log_dir = os.path.join(directory, "output_exttlkc_run.xes")
-                                    n_file_path = directory + "/output_exttlkc_run.xes" #added n_file_Path definition in case of external data (Thorwin Bergholz)
+                                    privacy_aware_log_dir = os.path.join(directory, "output_exttlkc_run_" + instructionIdExtTLKC + ".xes")
+                                    n_file_path = directory + "/output_exttlkc_run_" + instructionIdExtTLKC + ".xes" #added n_file_Path definition in case of external data (Thorwin Bergholz)
                                 else:
                                     n_file_path = file_name + "_" + str(t) + "_" + str(l) + "_" + str(k) + "_" + str(
                                         c) + "_" + bk_type + ".xes"
@@ -63,10 +63,10 @@ class privacyPreserving(object):
                                     anonymizer.relative_type(self.log, sensitive_att, cont, t, l, k, c, dict1,
                                                              trace_attributes, life_cycle, all_life_cycle, bk_type,
                                                              alpha, beta, utility_measure, multiprocess, mp_technique)
-                                self.add_privacy_metadata(log_time)
+                                #self.add_privacy_metadata(log_time) removed Metadata unwanted in comparison (Thorwin Bergholz)
                                 if external_name:
-                                    privacy_aware_log_dir = os.path.join(directory, "output_exttlkc_run.xes")
-                                    n_file_path = directory + "/output_exttlkc_run.xes" #added n_file_Path definition in case of external data (Thorwin Bergholz)
+                                    privacy_aware_log_dir = os.path.join(directory, "output_exttlkc_run_" + instructionIdExtTLKC + ".xes")
+                                    n_file_path = directory + "/output_exttlkc_run_" + instructionIdExtTLKC + ".xes" #added n_file_Path definition in case of external data (Thorwin Bergholz)
                                 else:
                                     n_file_path = file_name + "_" + str(t) + "_" + str(l) + "_" + str(k) + "_" + str(
                                     c) + "_" + bk_type + ".xes"
@@ -84,9 +84,9 @@ class privacyPreserving(object):
             return exception_msg
 
 
-    def add_privacy_metadata(self, log):
-        prefix = 'privacy:'
-        uri = 'paper_version_uri/privacy.xesext'
+    #def add_privacy_metadata(self, log):
+    #    prefix = 'privacy:'
+    #    uri = 'paper_version_uri/privacy.xesext'
 
-        privacy = privacyExtension(log, prefix, uri)
-        privacy.set_anonymizer('suppression', 'event', 'event')
+    #    privacy = privacyExtension(log, prefix, uri)
+    #    privacy.set_anonymizer('suppression', 'event', 'event')
