@@ -17,7 +17,7 @@ class privacyPreserving(object):
         '''
         self.log = xes_importer_factory.apply(log)
 
-    def apply(self, T, L, K, C, instructionIdExtTLKC, sensitive_att, cont, bk_type, trace_attributes, life_cycle, all_life_cycle, alpha, beta, directory, file_name, external_name, utility_measure=[0.5,0.5], multiprocess=True, mp_technique='pool'):
+    def apply(self, T, L, K, C, instructionIdExtTLKC, instanceId, fileId, sensitive_att, cont, bk_type, trace_attributes, life_cycle, all_life_cycle, alpha, beta, directory, file_name, external_name, utility_measure=[0.5,0.5], multiprocess=True, mp_technique='pool'):
 
         if bk_type == 'relative':
             dict1 = {
@@ -48,14 +48,14 @@ class privacyPreserving(object):
                             for t in T:
                                 #self.add_privacy_metadata(log[t]) removed Metadata unwanted in comparison (Thorwin Bergholz)
                                 if external_name:
-                                    privacy_aware_log_dir = os.path.join(directory, "output_exttlkc_run_" + instructionIdExtTLKC + ".xes")
-                                    n_file_path = directory + "/output_exttlkc_run_" + instructionIdExtTLKC + ".xes" #added n_file_Path definition in case of external data (Thorwin Bergholz)
+                                    privacy_aware_log_dir = os.path.join(directory, "output_exttlkc_" + instanceId + "_run_" + instructionIdExtTLKC + "_" + fileId + ".xes")
+                                    n_file_path = directory + "/output_exttlkc_" + instanceId + "_run_" + instructionIdExtTLKC+ "_" + fileId + ".xes" #added n_file_Path definition in case of external data (Thorwin Bergholz)
                                 else:
                                     n_file_path = file_name + "_" + str(t) + "_" + str(l) + "_" + str(k) + "_" + str(
                                         c) + "_" + bk_type + ".xes"
                                     privacy_aware_log_dir = os.path.join(directory, n_file_path)
                                 xes_exporter.export_log(log[t], privacy_aware_log_dir)
-                                print(n_file_path + " has been exported!")
+                                print(n_file_path + " has been exported!", flush= True) #added flush so it is visible in docker logs (Thorwin Bergholz)
                         elif bk_type == "relative":
                             print("l = " + str(l) + " type = " + str(bk_type) + " is running...")
                             for t in T:
@@ -65,8 +65,8 @@ class privacyPreserving(object):
                                                              alpha, beta, utility_measure, multiprocess, mp_technique)
                                 #self.add_privacy_metadata(log_time) removed Metadata unwanted in comparison (Thorwin Bergholz)
                                 if external_name:
-                                    privacy_aware_log_dir = os.path.join(directory, "output_exttlkc_run_" + instructionIdExtTLKC + ".xes")
-                                    n_file_path = directory + "/output_exttlkc_run_" + instructionIdExtTLKC + ".xes" #added n_file_Path definition in case of external data (Thorwin Bergholz)
+                                    privacy_aware_log_dir = os.path.join(directory, "output_exttlkc_" + instanceId + "_run_" + instructionIdExtTLKC + "_" + fileId + ".xes")
+                                    n_file_path = directory + "/output_exttlkc_" + instanceId + "_run_" + instructionIdExtTLKC+ "_" + fileId + ".xes" #added n_file_Path definition in case of external data (Thorwin Bergholz)
                                 else:
                                     n_file_path = file_name + "_" + str(t) + "_" + str(l) + "_" + str(k) + "_" + str(
                                     c) + "_" + bk_type + ".xes"

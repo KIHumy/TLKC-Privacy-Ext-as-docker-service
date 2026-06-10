@@ -32,9 +32,9 @@ def mainEntrypoint():
 
 def collectRequirementsForAlgo():
     t = {"name":"t", "value":"someString", "description":"This tring should be a time value applicable ones are: original, seconds, minutes, hours, days.", "type":"string"}
-    l = {"name":"l", "lowerBound":"2", "upperBound":"2", "type":"int"}
-    k = {"name":"k", "lowerBound":"20", "upperBound":"20", "type":"int"}
-    c = {"name":"c", "lowerBound":"0.5", "upperBound":"0.5", "type":"float"}
+    l = {"name":"l", "lowerBound":"0", "upperBound":None, "autoAdept":True, "type":"int"}
+    k = {"name":"k", "lowerBound":"0", "upperBound":None, "autoAdept":True, "type":"int"}
+    c = {"name":"c", "lowerBound":"0.0", "upperBound":"1.0", "autoAdept":True, "type":"float"}
     #logName = {"name":"logName", "value":"someString", "description":"This string is the name of the event log file you want to process.", "type":"string"}
     algoVariables = [t, l, k, c]
     return {**algoIdentity, "inputFormat":"xes", "outputStructure":"eventLog", "requirements":algoVariables}
@@ -43,7 +43,7 @@ def startInstructionHandler(instruction):
     print("Entered the instruction block.", flush=True)
     if instruction["instruction"] == "start_n_test":
         print("Accessed n_test function.", flush=True)
-        requests.post("http://cliandanalyzer:8000/result/status", json={**algoIdentity, "instructionId":instruction["instructionId"], "status":"network_stable"})
+        requests.post("http://cliandanalyzer:8000/result/status", json={**algoIdentity, "instructionId":instruction["instructionId"], "status":"network_stable", "fileId":""})
     if instruction == {"instruction":"send_requirements"}:
         print("Accessed requirements function.", flush=True)
         jsonRequirements = collectRequirementsForAlgo()
@@ -67,9 +67,9 @@ def startInstructionHandler(instruction):
                 c = inputValues["value"]
             if inputValues["name"] == "logName":
                 logName = inputValues["value"]
-        main.executeExtTLKC(t, l, k, c, logName, instruction["instructionId"])
+        main.executeExtTLKC(t, l, k, c, logName, instruction["instructionId"], algoIdentity["identification"]["id"], instruction["fileId"])
         print("Sending the result of the template function to the server.", flush= True)
-        requests.post("http://cliandanalyzer:8000/result/status", json={**algoIdentity, "instructionId":instruction["instructionId"], "status":"finished_privacy_enhancing_algorithm"})
+        requests.post("http://cliandanalyzer:8000/result/status", json={**algoIdentity, "instructionId":instruction["instructionId"], "status":"finished_privacy_enhancing_algorithm", "fileId":instruction["fileId"]})
     return
 
 if __name__ == "__main__":

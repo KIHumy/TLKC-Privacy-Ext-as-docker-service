@@ -2,7 +2,7 @@ from datetime import datetime
 from p_tlkc_privacy_ext.privacyPreserving import privacyPreserving
 import os
 
-def executeExtTLKC(t, l, k, c, logName, instructionId):
+def executeExtTLKC(t, l, k, c, logName, instructionId, instanceId, fileId):
     event_log = "./extTLKC/input/" + logName
     L = [l]#[2]
     K = [k]#[20]
@@ -26,6 +26,6 @@ def executeExtTLKC(t, l, k, c, logName, instructionId):
     if not os.path.exists(pa_log_dir):
         os.makedirs(pa_log_dir)
     pp = privacyPreserving(event_log)
-    privacy_aware_log_dir, max_removed = pp.apply(T, L, K, C, instructionId, sensitive_att, cont, bk_type, event_attributes, life_cycle, all_life_cycle,
+    privacy_aware_log_dir, max_removed = pp.apply(T, L, K, C, instructionId, instanceId, fileId, sensitive_att, cont, bk_type, event_attributes, life_cycle, all_life_cycle,
                                    alpha, beta, pa_log_dir, pa_log_name, True, utility_measure=utility_measure, multiprocess=multiprocess, mp_technique=mp_technique) #external name has been set to True was False before
     print(privacy_aware_log_dir)
